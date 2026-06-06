@@ -101,6 +101,7 @@ a {
 .menu-card,
 .credit-card,
 .lesson-card,
+.challenge-session-card,
 .review-card {
   background: var(--paper);
   backdrop-filter: blur(14px);
@@ -180,6 +181,11 @@ a {
   box-shadow: 0 14px 28px rgba(239, 71, 111, 0.22);
 }
 
+.warm-btn {
+  background: linear-gradient(135deg, #f59f00, #ff6b6b);
+  box-shadow: 0 14px 28px rgba(245, 159, 0, 0.22);
+}
+
 .ghost-btn {
   background: rgba(255, 255, 255, 0.72);
   color: var(--ink);
@@ -255,6 +261,7 @@ a {
 .menu-card,
 .credit-card,
 .lesson-card,
+.challenge-session-card,
 .review-card {
   padding: 1.25rem;
   border-radius: var(--radius-lg);
@@ -351,6 +358,52 @@ a {
 .lesson-card {
   display: grid;
   gap: 1.25rem;
+}
+
+.challenge-session-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.challenge-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.challenge-stat {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid var(--line);
+}
+
+.challenge-stat strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1.4rem;
+}
+
+.challenge-stars {
+  letter-spacing: 0.16em;
+  color: #f59f00;
+  font-size: 1.2rem;
+}
+
+.challenge-toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.challenge-board {
+  display: grid;
+  gap: 1rem;
+}
+
+.challenge-question-meta {
+  margin: 0 0 0.55rem;
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
 .lesson-header {
@@ -596,6 +649,7 @@ a {
 }
 
 .lesson-card,
+.challenge-session-card,
 .review-card,
 .hero-copy,
 .hero-panel {
@@ -619,6 +673,7 @@ a {
   .menu-card,
   .credit-card,
   .lesson-card,
+  .challenge-session-card,
   .review-card {
     padding: 1.1rem;
   }
@@ -643,6 +698,7 @@ a {
 
   .hero-actions,
   .lesson-actions,
+  .challenge-toolbar,
   .flashcard-actions,
   .quiz-options {
     flex-direction: column;
@@ -654,6 +710,10 @@ a {
   .flashcard,
   .menu-btn {
     width: 100%;
+  }
+
+  .challenge-summary {
+    grid-template-columns: 1fr;
   }
 
   .flashcard {

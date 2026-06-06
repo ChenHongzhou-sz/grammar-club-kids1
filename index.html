@@ -23,12 +23,13 @@
         </p>
         <div class="hero-actions">
           <button id="startLearningBtn" class="primary-btn">从推荐课程开始</button>
+          <button id="challengeModeBtn" class="primary-btn warm-btn">开始 5 题闯关</button>
           <button id="reviewBtn" class="ghost-btn">抽一张复习卡</button>
         </div>
       </div>
 
       <section class="hero-panel" aria-label="学习概览">
-        <div class="mini-chip">10 节微课</div>
+        <div id="heroLessonCount" class="mini-chip">10 节微课</div>
         <div class="panel-row">
           <strong id="heroCompleted">0</strong>
           <span>已完成课程</span>
@@ -86,6 +87,18 @@
       <section class="content">
         <article id="lessonView" class="lesson-card" aria-live="polite"></article>
 
+        <section id="challengeSection" class="challenge-session-card">
+          <div class="card-topline">
+            <span>闯关挑战</span>
+            <span>随机抽 5 题，做完就亮星</span>
+          </div>
+          <div id="challengeSummary" class="challenge-summary"></div>
+          <div class="challenge-toolbar">
+            <button id="newChallengeBtn" class="primary-btn small-btn">换一组新题</button>
+          </div>
+          <div id="challengeBoard" class="challenge-board"></div>
+        </section>
+
         <section id="reviewSection" class="review-card">
           <div class="card-topline">
             <span>复习卡片</span>
@@ -106,8 +119,8 @@
     </main>
 
     <footer class="site-footer">
-      <p>Grammar Club Kids · 为家庭自学设计的第一版基础语法站</p>
-      <p>建议学习顺序：句子骨架 → be 动词 → 一般现在时 → 提问与回答</p>
+      <p>Grammar Club Kids · 为家庭自学设计的第二版基础语法站</p>
+      <p>建议学习顺序：句子骨架 → be 动词 → there be → 一般现在时 → 提问与回答 → 一般过去时</p>
     </footer>
 
     <script src="./app.js"></script>

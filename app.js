@@ -610,11 +610,195 @@ const lessons = [
       { front: "S + V", back: "主语 + 谓语：最短的完整句骨架。" },
       { front: "S + V + O", back: "主语 + 谓语 + 宾语：动作指向对象。" }
     ]
+  },
+  {
+    id: "there-be",
+    unit: "第 11 课",
+    title: "there be 句型",
+    tag: "高频句型",
+    hook: "想说“某地有某物”，there be 是最顺手的句型。",
+    goal: "会用 there is / there are 描述某个地方有什么。",
+    rule: "there be 要跟后面的第一个名词保持单复数一致：单数用 is，复数用 are。",
+    steps: [
+      "先看你想介绍的是一个东西，还是多个东西。",
+      "单数或不可数名词前面常用 there is。",
+      "复数名词前面常用 there are。"
+    ],
+    examples: [
+      {
+        en: "There is a pencil on the desk.",
+        zh: "桌子上有一支铅笔。",
+        note: "a pencil 是单数，所以用 is。"
+      },
+      {
+        en: "There are two cats under the tree.",
+        zh: "树下有两只猫。",
+        note: "two cats 是复数，所以用 are。"
+      },
+      {
+        en: "There is some milk in the cup.",
+        zh: "杯子里有一些牛奶。",
+        note: "milk 是不可数名词，也常用 is。"
+      }
+    ],
+    mistakes: [
+      "看到离 be 最近的是地点短语，就忘记真正决定单复数的是后面的名词。",
+      "把 There have 写成 there be 句型。",
+      "中文直译成 “Desk on has a pencil.”。"
+    ],
+    challenge: "请分别用 there is 和 there are 写一句关于你书包或书桌的句子。",
+    quiz: [
+      {
+        question: "“___ a clock on the wall.” 应填什么？",
+        options: ["There is", "There are", "It is"],
+        answer: 0,
+        explain: "a clock 是单数，所以用 There is。"
+      },
+      {
+        question: "哪一句正确？",
+        options: ["There are a book on the chair.", "There is two books on the chair.", "There are two books on the chair."],
+        answer: 2,
+        explain: "two books 是复数，所以要用 There are。"
+      },
+      {
+        question: "there be 句型最常用来表达什么？",
+        options: ["谁喜欢什么", "某地有某物", "某人正在做什么"],
+        answer: 1,
+        explain: "there be 最常用于介绍“某个地方有什么”。"
+      }
+    ],
+    cards: [
+      { front: "There is ...", back: "后面第一个名词是单数或不可数时，常用 There is。" },
+      { front: "There are ...", back: "后面第一个名词是复数时，常用 There are。" }
+    ]
+  },
+  {
+    id: "simple-past",
+    unit: "第 12 课",
+    title: "一般过去时",
+    tag: "时间变化",
+    hook: "昨天、上周、刚才发生过的事，最常用一般过去时。",
+    goal: "知道一般过去时表示已经发生并结束的动作，会区分规则变化和常见不规则变化。",
+    rule: "过去发生的动作常用动词过去式；提问和否定时常借助 did。",
+    steps: [
+      "先看是不是昨天、上周、刚刚、以前发生过的事。",
+      "肯定句常把动词变成过去式。",
+      "否定句和疑问句常用 did / didn't，后面的动词回到原形。"
+    ],
+    examples: [
+      {
+        en: "I watched a film last night.",
+        zh: "我昨晚看了一场电影。",
+        note: "watch 规则变化，加 -ed。"
+      },
+      {
+        en: "We went to the museum on Sunday.",
+        zh: "我们周日去了博物馆。",
+        note: "go 的过去式是不规则变化 went。"
+      },
+      {
+        en: "Did she finish her homework?",
+        zh: "她完成作业了吗？",
+        note: "用了 Did，finish 回到原形。"
+      }
+    ],
+    mistakes: [
+      "用了 did 以后，后面的动词还写成过去式。",
+      "把 go、see、have 这类常见不规则过去式记混。",
+      "看到 yesterday 却还用一般现在时。"
+    ],
+    challenge: "写一句你昨天做过的事，再把它改成一般疑问句。",
+    quiz: [
+      {
+        question: "哪一句正确？",
+        options: ["She played tennis yesterday.", "She plays tennis yesterday.", "She did played tennis yesterday."],
+        answer: 0,
+        explain: "yesterday 常提示一般过去时，肯定句用 played。"
+      },
+      {
+        question: "“Did Tom ___ breakfast at home?” 应填什么？",
+        options: ["ate", "eat", "eats"],
+        answer: 1,
+        explain: "用了 Did，后面的动词要回到原形 eat。"
+      },
+      {
+        question: "go 的过去式是什么？",
+        options: ["goed", "went", "gone"],
+        answer: 1,
+        explain: "go 的一般过去时是不规则变化 went。"
+      }
+    ],
+    cards: [
+      { front: "did + verb", back: "一般过去时提问或否定时，常用 did / didn't + 动词原形。" },
+      { front: "go -> went", back: "这是最常见也最值得先记住的不规则过去式之一。" }
+    ]
+  },
+  {
+    id: "wh-questions",
+    unit: "第 13 课",
+    title: "特殊疑问句",
+    tag: "开口提问",
+    hook: "会问 what、where、when、why、how，英语对话就真的活起来了。",
+    goal: "分清常见特殊疑问词的意思，并能按“疑问词 + 一般疑问句骨架”来造句。",
+    rule: "特殊疑问句通常是在一般疑问句前面再加一个疑问词。",
+    steps: [
+      "先想你到底想问“什么、哪里、什么时候、为什么、怎样”。",
+      "再把句子变成一般疑问句骨架。",
+      "最后把疑问词放到最前面。"
+    ],
+    examples: [
+      {
+        en: "What do you eat for breakfast?",
+        zh: "你早餐吃什么？",
+        note: "what 问“什么”。"
+      },
+      {
+        en: "Where is your school bag?",
+        zh: "你的书包在哪里？",
+        note: "where 问地点。"
+      },
+      {
+        en: "Why were they late?",
+        zh: "他们为什么迟到了？",
+        note: "why 问原因，were 要放在主语前。"
+      }
+    ],
+    mistakes: [
+      "疑问词放对了，但后面句子还是陈述句顺序。",
+      "what time 和 when 乱用，其实很多时候都能问时间，但语气和精细度不同。",
+      "问主语时和问宾语时结构没分清。"
+    ],
+    challenge: "请各写一句 what、where、how 开头的问题，内容围绕学校生活。",
+    quiz: [
+      {
+        question: "哪一句语序正确？",
+        options: ["Where you are going?", "Where are you going?", "Where going are you?"],
+        answer: 1,
+        explain: "疑问词后面还是要接一般疑问句骨架：are you going。"
+      },
+      {
+        question: "如果想问“你为什么笑？”，哪一句最合适？",
+        options: ["Why do you laugh?", "Why are you laugh?", "What do you laugh?"],
+        answer: 0,
+        explain: "这是实义动词句，常用 do 来帮助提问。"
+      },
+      {
+        question: "where 最常用来问什么？",
+        options: ["原因", "方式", "地点"],
+        answer: 2,
+        explain: "where 主要问地点。"
+      }
+    ],
+    cards: [
+      { front: "What ...?", back: "what 常问“什么”。" },
+      { front: "Where ...?", back: "where 常问地点。" }
+    ]
   }
 ];
 
 const storageKey = "grammarClubKidsState_v1";
 const totalLessons = lessons.length;
+const challengeSize = 5;
 const flashcards = lessons.flatMap((lesson) =>
   lesson.cards.map((card) => ({
     ...card,
@@ -629,8 +813,14 @@ const elements = {
   progressBar: document.getElementById("progressBar"),
   progressText: document.getElementById("progressText"),
   progressMessage: document.getElementById("progressMessage"),
+  heroLessonCount: document.getElementById("heroLessonCount"),
   heroCompleted: document.getElementById("heroCompleted"),
   heroAccuracy: document.getElementById("heroAccuracy"),
+  challengeSummary: document.getElementById("challengeSummary"),
+  challengeBoard: document.getElementById("challengeBoard"),
+  challengeSection: document.getElementById("challengeSection"),
+  challengeModeBtn: document.getElementById("challengeModeBtn"),
+  newChallengeBtn: document.getElementById("newChallengeBtn"),
   flashcard: document.getElementById("flashcard"),
   flashcardLesson: document.getElementById("flashcardLesson"),
   flipCardBtn: document.getElementById("flipCardBtn"),
@@ -642,13 +832,54 @@ const elements = {
   startLearningBtn: document.getElementById("startLearningBtn")
 };
 
+function shuffleArray(items) {
+  const next = [...items];
+
+  for (let index = next.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [next[index], next[swapIndex]] = [next[swapIndex], next[index]];
+  }
+
+  return next;
+}
+
+function getQuestionBank() {
+  return lessons.flatMap((lesson) =>
+    lesson.quiz.map((item, questionIndex) => ({
+      id: `${lesson.id}-${questionIndex}`,
+      lessonId: lesson.id,
+      lessonTitle: `${lesson.unit} · ${lesson.title}`,
+      question: item.question,
+      options: item.options,
+      answer: item.answer,
+      explain: item.explain
+    }))
+  );
+}
+
+function createChallengeQuestions() {
+  const bank = getQuestionBank();
+  return shuffleArray(bank).slice(0, Math.min(challengeSize, bank.length));
+}
+
+function createEmptyChallenge() {
+  return {
+    questions: createChallengeQuestions(),
+    answers: {},
+    roundsCompleted: 0,
+    bestScore: 0,
+    lastScore: null
+  };
+}
+
 function getDefaultState() {
   return {
     selectedLessonId: lessons[0].id,
     completedIds: [],
     answers: {},
     cardIndex: 0,
-    cardSide: "front"
+    cardSide: "front",
+    challenge: createEmptyChallenge()
   };
 }
 
@@ -660,11 +891,29 @@ function loadState() {
     }
 
     const parsed = JSON.parse(raw);
+
+    const normalizedChallenge = {
+      ...createEmptyChallenge(),
+      ...(parsed.challenge && typeof parsed.challenge === "object" ? parsed.challenge : {}),
+      questions:
+        Array.isArray(parsed.challenge?.questions) && parsed.challenge.questions.length > 0
+          ? parsed.challenge.questions
+          : createChallengeQuestions(),
+      answers:
+        parsed.challenge?.answers && typeof parsed.challenge.answers === "object"
+          ? parsed.challenge.answers
+          : {}
+    };
+
     return {
       ...getDefaultState(),
       ...parsed,
+      selectedLessonId: lessons.some((lesson) => lesson.id === parsed.selectedLessonId)
+        ? parsed.selectedLessonId
+        : lessons[0].id,
       completedIds: Array.isArray(parsed.completedIds) ? parsed.completedIds : [],
-      answers: parsed.answers && typeof parsed.answers === "object" ? parsed.answers : {}
+      answers: parsed.answers && typeof parsed.answers === "object" ? parsed.answers : {},
+      challenge: normalizedChallenge
     };
   } catch (error) {
     return getDefaultState();
@@ -729,6 +978,74 @@ function getStats() {
   };
 }
 
+function getChallengeState() {
+  if (!state.challenge || !Array.isArray(state.challenge.questions) || state.challenge.questions.length === 0) {
+    state.challenge = createEmptyChallenge();
+  }
+
+  return state.challenge;
+}
+
+function getChallengeScore() {
+  const challenge = getChallengeState();
+  let correct = 0;
+  let answered = 0;
+
+  challenge.questions.forEach((question) => {
+    if (typeof challenge.answers[question.id] === "number") {
+      answered += 1;
+      if (challenge.answers[question.id] === question.answer) {
+        correct += 1;
+      }
+    }
+  });
+
+  return {
+    correct,
+    answered,
+    total: challenge.questions.length,
+    finished: answered === challenge.questions.length
+  };
+}
+
+function getStarString(score) {
+  const full = "★".repeat(score);
+  const empty = "☆".repeat(Math.max(0, challengeSize - score));
+  return `${full}${empty}`;
+}
+
+function startNewChallenge() {
+  const previous = getChallengeState();
+  state.challenge = {
+    questions: createChallengeQuestions(),
+    answers: {},
+    roundsCompleted: previous.roundsCompleted,
+    bestScore: previous.bestScore,
+    lastScore: previous.lastScore
+  };
+  saveState();
+  renderAll();
+}
+
+function handleChallengeAnswer(questionId, optionIndex) {
+  const challenge = getChallengeState();
+  if (typeof challenge.answers[questionId] === "number") {
+    return;
+  }
+
+  challenge.answers[questionId] = optionIndex;
+
+  const score = getChallengeScore();
+  if (score.finished && challenge.lastScore === null) {
+    challenge.roundsCompleted += 1;
+    challenge.lastScore = score.correct;
+    challenge.bestScore = Math.max(challenge.bestScore, score.correct);
+  }
+
+  saveState();
+  renderAll();
+}
+
 function getRecommendedLesson() {
   return lessons.find((lesson) => !state.completedIds.includes(lesson.id)) || lessons[0];
 }
@@ -776,6 +1093,14 @@ function goToNextLesson() {
 function jumpToRecommendedLesson() {
   const recommended = getRecommendedLesson();
   selectLesson(recommended.id);
+}
+
+function jumpToChallengeMode() {
+  if (getChallengeScore().finished) {
+    startNewChallenge();
+  }
+
+  elements.challengeSection.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function setFlashcard(index) {
@@ -851,6 +1176,7 @@ function renderProgress() {
   const progressPercent = Math.round((stats.completedCount / totalLessons) * 100);
   const recommended = getRecommendedLesson();
 
+  elements.heroLessonCount.textContent = `${totalLessons} 节微课`;
   elements.progressBar.style.width = `${progressPercent}%`;
   elements.progressText.textContent = `${stats.completedCount} / ${totalLessons}`;
   elements.progressMessage.textContent =
@@ -996,6 +1322,76 @@ function renderLessonView() {
   document.getElementById("nextLessonBtn").addEventListener("click", goToNextLesson);
 }
 
+function renderChallenge() {
+  const challenge = getChallengeState();
+  const score = getChallengeScore();
+  const lastScoreText =
+    challenge.lastScore === null ? "还没完成本轮" : `${challenge.lastScore} / ${challenge.questions.length}`;
+
+  elements.challengeSummary.innerHTML = `
+    <article class="challenge-stat">
+      <span>本轮进度</span>
+      <strong>${score.answered} / ${score.total}</strong>
+    </article>
+    <article class="challenge-stat">
+      <span>历史最好</span>
+      <strong>${challenge.bestScore} / ${challenge.questions.length}</strong>
+    </article>
+    <article class="challenge-stat">
+      <span>最近成绩</span>
+      <strong>${lastScoreText}</strong>
+      <div class="challenge-stars">${challenge.lastScore === null ? "☆☆☆☆☆" : getStarString(challenge.lastScore)}</div>
+    </article>
+  `;
+
+  elements.challengeBoard.innerHTML = challenge.questions
+    .map((question, index) => {
+      const chosenIndex = challenge.answers[question.id];
+      const hasAnswered = typeof chosenIndex === "number";
+      const cardClass = !hasAnswered
+        ? "quiz-card"
+        : chosenIndex === question.answer
+          ? "quiz-card correct"
+          : "quiz-card wrong";
+
+      const optionsHtml = question.options
+        .map((option, optionIndex) => `
+          <button
+            class="${buildQuizOptionClass(chosenIndex === optionIndex, optionIndex === question.answer, hasAnswered, optionIndex, question.answer)}"
+            data-challenge-question="${question.id}"
+            data-challenge-option="${optionIndex}"
+          >
+            ${String.fromCharCode(65 + optionIndex)}. ${option}
+          </button>
+        `)
+        .join("");
+
+      return `
+        <article class="${cardClass}">
+          <h3>闯关题 ${index + 1}</h3>
+          <p class="challenge-question-meta">${question.lessonTitle}</p>
+          <p class="quiz-question">${question.question}</p>
+          <div class="quiz-options">${optionsHtml}</div>
+          ${
+            hasAnswered
+              ? `<p class="quiz-explain"><strong>${chosenIndex === question.answer ? "答对了。 " : "再试试。 "}</strong>${question.explain}</p>`
+              : ""
+          }
+        </article>
+      `;
+    })
+    .join("");
+
+  document.querySelectorAll("[data-challenge-question]").forEach((button) => {
+    button.addEventListener("click", () => {
+      handleChallengeAnswer(
+        button.getAttribute("data-challenge-question"),
+        Number(button.getAttribute("data-challenge-option"))
+      );
+    });
+  });
+}
+
 function renderFlashcard() {
   const card = flashcards[state.cardIndex] || flashcards[0];
   const showFront = state.cardSide === "front";
@@ -1014,10 +1410,13 @@ function renderAll() {
   renderMenu();
   renderProgress();
   renderLessonView();
+  renderChallenge();
   renderFlashcard();
 }
 
 elements.startLearningBtn.addEventListener("click", jumpToRecommendedLesson);
+elements.challengeModeBtn.addEventListener("click", jumpToChallengeMode);
+elements.newChallengeBtn.addEventListener("click", startNewChallenge);
 elements.reviewBtn.addEventListener("click", () => {
   randomFlashcard();
   elements.reviewSection.scrollIntoView({ behavior: "smooth", block: "start" });
