@@ -23,6 +23,7 @@
         </p>
         <div class="hero-actions">
           <button id="startLearningBtn" class="primary-btn">从推荐课程开始</button>
+          <button id="todayModeBtn" class="primary-btn cool-btn">去做今日 5 题</button>
           <button id="challengeModeBtn" class="primary-btn warm-btn">开始 5 题闯关</button>
           <button id="wrongModeBtn" class="ghost-btn">去刷错题</button>
           <button id="reviewBtn" class="ghost-btn">抽一张复习卡</button>
@@ -92,6 +93,15 @@
       <section class="content">
         <article id="lessonView" class="lesson-card" aria-live="polite"></article>
 
+        <section id="todaySection" class="today-session-card">
+          <div class="card-topline">
+            <span>今日 5 题</span>
+            <span id="todayDateLabel">今天自动换一组</span>
+          </div>
+          <div id="todaySummary" class="today-summary"></div>
+          <div id="todayBoard" class="today-board"></div>
+        </section>
+
         <section id="challengeSection" class="challenge-session-card">
           <div class="card-topline">
             <span>闯关挑战</span>
@@ -136,7 +146,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>Grammar Club Kids · 为家庭自学设计的第三版基础语法站</p>
+      <p>Grammar Club Kids · 为家庭自学设计的第四版基础语法站</p>
       <p>建议学习顺序：句子骨架 → be 动词 → there be → 一般现在时 → 提问与回答 → 一般过去时</p>
     </footer>
 

@@ -101,6 +101,7 @@ a {
 .menu-card,
 .credit-card,
 .lesson-card,
+.today-session-card,
 .challenge-session-card,
 .wrongbook-card,
 .review-card {
@@ -180,6 +181,11 @@ a {
   background: linear-gradient(135deg, var(--berry), var(--coral));
   color: #fff;
   box-shadow: 0 14px 28px rgba(239, 71, 111, 0.22);
+}
+
+.cool-btn {
+  background: linear-gradient(135deg, #3c91e6, #79d3c3);
+  box-shadow: 0 14px 28px rgba(60, 145, 230, 0.22);
 }
 
 .warm-btn {
@@ -262,6 +268,7 @@ a {
 .menu-card,
 .credit-card,
 .lesson-card,
+.today-session-card,
 .challenge-session-card,
 .wrongbook-card,
 .review-card {
@@ -362,12 +369,14 @@ a {
   gap: 1.25rem;
 }
 
+.today-session-card,
 .challenge-session-card,
 .wrongbook-card {
   display: grid;
   gap: 1rem;
 }
 
+.today-summary,
 .challenge-summary,
 .wrongbook-summary {
   display: grid;
@@ -375,6 +384,7 @@ a {
   gap: 0.9rem;
 }
 
+.today-stat,
 .challenge-stat,
 .wrongbook-stat {
   padding: 1rem;
@@ -383,6 +393,7 @@ a {
   border: 1px solid var(--line);
 }
 
+.today-stat strong,
 .challenge-stat strong,
 .wrongbook-stat strong {
   display: block;
@@ -409,6 +420,11 @@ a {
 
 .challenge-board,
 .wrongbook-board {
+  display: grid;
+  gap: 1rem;
+}
+
+.today-board {
   display: grid;
   gap: 1rem;
 }
@@ -680,6 +696,7 @@ a {
 }
 
 .lesson-card,
+.today-session-card,
 .challenge-session-card,
 .wrongbook-card,
 .review-card,
@@ -705,6 +722,7 @@ a {
   .menu-card,
   .credit-card,
   .lesson-card,
+  .today-session-card,
   .challenge-session-card,
   .wrongbook-card,
   .review-card {
@@ -745,6 +763,7 @@ a {
     width: 100%;
   }
 
+  .today-summary,
   .challenge-summary {
     grid-template-columns: 1fr;
   }

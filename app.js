@@ -799,6 +799,7 @@ const lessons = [
 const storageKey = "grammarClubKidsState_v1";
 const totalLessons = lessons.length;
 const challengeSize = 5;
+const dailyPracticeSize = 5;
 const questionBank = lessons.flatMap((lesson) =>
   lesson.quiz.map((item, questionIndex) => ({
     id: `${lesson.id}-${questionIndex}`,
@@ -829,6 +830,11 @@ const elements = {
   heroCompleted: document.getElementById("heroCompleted"),
   heroAccuracy: document.getElementById("heroAccuracy"),
   heroWrongCount: document.getElementById("heroWrongCount"),
+  todaySummary: document.getElementById("todaySummary"),
+  todayBoard: document.getElementById("todayBoard"),
+  todaySection: document.getElementById("todaySection"),
+  todayModeBtn: document.getElementById("todayModeBtn"),
+  todayDateLabel: document.getElementById("todayDateLabel"),
   challengeSummary: document.getElementById("challengeSummary"),
   challengeBoard: document.getElementById("challengeBoard"),
   challengeSection: document.getElementById("challengeSection"),
@@ -861,8 +867,73 @@ function shuffleArray(items) {
   return next;
 }
 
+function shuffleArrayWithRandom(items, random) {
+  const next = [...items];
+
+  for (let index = next.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [next[index], next[swapIndex]] = [next[swapIndex], next[index]];
+  }
+
+  return next;
+}
+
+function hashString(text) {
+  let hash = 2166136261;
+
+  for (const char of text) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+
+  return hash >>> 0;
+}
+
+function createSeededRandom(seed) {
+  let value = seed >>> 0;
+
+  return () => {
+    value = (Math.imul(value, 1664525) + 1013904223) >>> 0;
+    return value / 4294967296;
+  };
+}
+
+function getTodayKey() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatDateLabel(dateKey) {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  if (!year || !month || !day) {
+    return "今天自动换一组";
+  }
+
+  return `${year} 年 ${month} 月 ${day} 日`;
+}
+
+function createDailyQuestionIds(dateKey) {
+  const random = createSeededRandom(hashString(`grammar-daily-${dateKey}`));
+  return shuffleArrayWithRandom(questionBank, random)
+    .slice(0, Math.min(dailyPracticeSize, questionBank.length))
+    .map((question) => question.id);
+}
+
 function createChallengeQuestions() {
   return shuffleArray(questionBank).slice(0, Math.min(challengeSize, questionBank.length));
+}
+
+function createEmptyDailyPractice(dateKey = getTodayKey()) {
+  return {
+    dateKey,
+    questionIds: createDailyQuestionIds(dateKey),
+    answers: {},
+    completedDates: [],
+    lastScore: null
+  };
 }
 
 function createEmptyChallenge() {
@@ -882,6 +953,7 @@ function getDefaultState() {
     answers: {},
     wrongIds: [],
     wrongReview: {},
+    dailyPractice: createEmptyDailyPractice(),
     cardIndex: 0,
     cardSide: "front",
     challenge: createEmptyChallenge()
@@ -896,6 +968,11 @@ function loadState() {
     }
 
     const parsed = JSON.parse(raw);
+    const parsedDaily = parsed.dailyPractice && typeof parsed.dailyPractice === "object" ? parsed.dailyPractice : {};
+    const parsedDailyDateKey = typeof parsedDaily.dateKey === "string" ? parsedDaily.dateKey : getTodayKey();
+    const parsedDailyQuestionIds = Array.isArray(parsedDaily.questionIds)
+      ? parsedDaily.questionIds.filter((questionId) => questionLookup.has(questionId))
+      : [];
     const normalizedWrongIds = Array.isArray(parsed.wrongIds)
       ? [...new Set(parsed.wrongIds.filter((questionId) => questionLookup.has(questionId)))]
       : [];
@@ -913,6 +990,20 @@ function loadState() {
               ])
           )
         : {};
+    const normalizedDailyPractice = {
+      ...createEmptyDailyPractice(parsedDailyDateKey),
+      ...parsedDaily,
+      dateKey: parsedDailyDateKey,
+      questionIds:
+        parsedDailyQuestionIds.length > 0
+          ? parsedDailyQuestionIds.slice(0, dailyPracticeSize)
+          : createDailyQuestionIds(parsedDailyDateKey),
+      answers: parsedDaily.answers && typeof parsedDaily.answers === "object" ? parsedDaily.answers : {},
+      completedDates: Array.isArray(parsedDaily.completedDates)
+        ? [...new Set(parsedDaily.completedDates.filter((dateKey) => typeof dateKey === "string"))]
+        : [],
+      lastScore: typeof parsedDaily.lastScore === "number" ? parsedDaily.lastScore : null
+    };
 
     const normalizedChallenge = {
       ...createEmptyChallenge(),
@@ -937,6 +1028,7 @@ function loadState() {
       answers: parsed.answers && typeof parsed.answers === "object" ? parsed.answers : {},
       wrongIds: normalizedWrongIds,
       wrongReview: normalizedWrongReview,
+      dailyPractice: normalizedDailyPractice,
       challenge: normalizedChallenge
     };
   } catch (error) {
@@ -1029,6 +1121,63 @@ function getChallengeScore() {
     answered,
     total: challenge.questions.length,
     finished: answered === challenge.questions.length
+  };
+}
+
+function getDailyPracticeState() {
+  const todayKey = getTodayKey();
+
+  if (!state.dailyPractice || typeof state.dailyPractice !== "object") {
+    state.dailyPractice = createEmptyDailyPractice(todayKey);
+  }
+
+  if (state.dailyPractice.dateKey !== todayKey) {
+    const completedDates = Array.isArray(state.dailyPractice.completedDates) ? state.dailyPractice.completedDates : [];
+    state.dailyPractice = {
+      ...createEmptyDailyPractice(todayKey),
+      completedDates
+    };
+  }
+
+  if (!Array.isArray(state.dailyPractice.questionIds) || state.dailyPractice.questionIds.length === 0) {
+    state.dailyPractice.questionIds = createDailyQuestionIds(todayKey);
+  }
+
+  return state.dailyPractice;
+}
+
+function getDailyQuestions() {
+  const dailyPractice = getDailyPracticeState();
+  let questions = dailyPractice.questionIds.map((questionId) => questionLookup.get(questionId)).filter(Boolean);
+
+  if (questions.length === 0) {
+    dailyPractice.questionIds = createDailyQuestionIds(dailyPractice.dateKey);
+    questions = dailyPractice.questionIds.map((questionId) => questionLookup.get(questionId)).filter(Boolean);
+  }
+
+  return questions;
+}
+
+function getDailyPracticeScore() {
+  const dailyPractice = getDailyPracticeState();
+  const questions = getDailyQuestions();
+  let correct = 0;
+  let answered = 0;
+
+  questions.forEach((question) => {
+    if (typeof dailyPractice.answers[question.id] === "number") {
+      answered += 1;
+      if (dailyPractice.answers[question.id] === question.answer) {
+        correct += 1;
+      }
+    }
+  });
+
+  return {
+    correct,
+    answered,
+    total: questions.length,
+    finished: questions.length > 0 && answered === questions.length
   };
 }
 
@@ -1156,6 +1305,10 @@ function jumpToRecommendedLesson() {
   selectLesson(recommended.id);
 }
 
+function jumpToTodayPractice() {
+  elements.todaySection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function jumpToChallengeMode() {
   if (getChallengeScore().finished) {
     startNewChallenge();
@@ -1182,6 +1335,29 @@ function handleWrongReviewAnswer(questionId, optionIndex) {
 
   if (isCorrect) {
     syncWrongQuestion(questionId, true);
+  }
+
+  saveState();
+  renderAll();
+}
+
+function handleDailyAnswer(questionId, optionIndex) {
+  const dailyPractice = getDailyPracticeState();
+  const question = questionLookup.get(questionId);
+
+  if (!question || typeof dailyPractice.answers[questionId] === "number") {
+    return;
+  }
+
+  dailyPractice.answers[questionId] = optionIndex;
+  syncWrongQuestion(questionId, optionIndex === question.answer);
+
+  const score = getDailyPracticeScore();
+  if (score.finished) {
+    dailyPractice.lastScore = score.correct;
+    if (!dailyPractice.completedDates.includes(dailyPractice.dateKey)) {
+      dailyPractice.completedDates = [...dailyPractice.completedDates, dailyPractice.dateKey];
+    }
   }
 
   saveState();
@@ -1267,7 +1443,7 @@ function renderProgress() {
   elements.progressText.textContent = `${stats.completedCount} / ${totalLessons}`;
   elements.progressMessage.textContent =
     stats.completedCount === totalLessons
-      ? "全部课程都打卡了，接下来可以反复刷错题和复习卡。"
+      ? "全部课程都打卡了，接下来可以做今日 5 题、刷错题和复习卡。"
       : `推荐下一节：${recommended.unit}《${recommended.title}》`;
   elements.heroCompleted.textContent = String(stats.completedCount);
   elements.heroAccuracy.textContent = `${stats.accuracy}%`;
@@ -1407,6 +1583,77 @@ function renderLessonView() {
   });
 
   document.getElementById("nextLessonBtn").addEventListener("click", goToNextLesson);
+}
+
+function renderTodayPractice() {
+  const dailyPractice = getDailyPracticeState();
+  const questions = getDailyQuestions();
+  const score = getDailyPracticeScore();
+  const statusText = score.finished ? "今天已打卡" : "今天还没做完";
+
+  elements.todayDateLabel.textContent = `${formatDateLabel(dailyPractice.dateKey)} · 自动换题`;
+  elements.todaySummary.innerHTML = `
+    <article class="today-stat">
+      <span>今日进度</span>
+      <strong>${score.answered} / ${score.total}</strong>
+    </article>
+    <article class="today-stat">
+      <span>累计打卡</span>
+      <strong>${dailyPractice.completedDates.length} 天</strong>
+    </article>
+    <article class="today-stat">
+      <span>今日状态</span>
+      <strong>${statusText}</strong>
+      <div class="challenge-stars">${score.finished ? getStarString(score.correct) : "☆☆☆☆☆"}</div>
+    </article>
+  `;
+
+  elements.todayBoard.innerHTML = questions
+    .map((question, index) => {
+      const chosenIndex = dailyPractice.answers[question.id];
+      const hasAnswered = typeof chosenIndex === "number";
+      const cardClass = !hasAnswered
+        ? "quiz-card"
+        : chosenIndex === question.answer
+          ? "quiz-card correct"
+          : "quiz-card wrong";
+
+      const optionsHtml = question.options
+        .map((option, optionIndex) => `
+          <button
+            class="${buildQuizOptionClass(chosenIndex === optionIndex, optionIndex === question.answer, hasAnswered, optionIndex, question.answer)}"
+            data-today-question="${question.id}"
+            data-today-option="${optionIndex}"
+          >
+            ${String.fromCharCode(65 + optionIndex)}. ${option}
+          </button>
+        `)
+        .join("");
+
+      return `
+        <article class="${cardClass}">
+          <h3>今日题 ${index + 1}</h3>
+          <p class="challenge-question-meta">${question.lessonTitle}</p>
+          <p class="quiz-question">${question.question}</p>
+          <div class="quiz-options">${optionsHtml}</div>
+          ${
+            hasAnswered
+              ? `<p class="quiz-explain"><strong>${chosenIndex === question.answer ? "答对了。 " : "今天先记住这题。 "}</strong>${question.explain}</p>`
+              : `<p class="quiz-explain">今天先做这一组，答错的题会自动进错题本。</p>`
+          }
+        </article>
+      `;
+    })
+    .join("");
+
+  document.querySelectorAll("[data-today-question]").forEach((button) => {
+    button.addEventListener("click", () => {
+      handleDailyAnswer(
+        button.getAttribute("data-today-question"),
+        Number(button.getAttribute("data-today-option"))
+      );
+    });
+  });
 }
 
 function renderChallenge() {
@@ -1573,12 +1820,14 @@ function renderAll() {
   renderMenu();
   renderProgress();
   renderLessonView();
+  renderTodayPractice();
   renderChallenge();
   renderWrongBook();
   renderFlashcard();
 }
 
 elements.startLearningBtn.addEventListener("click", jumpToRecommendedLesson);
+elements.todayModeBtn.addEventListener("click", jumpToTodayPractice);
 elements.challengeModeBtn.addEventListener("click", jumpToChallengeMode);
 elements.newChallengeBtn.addEventListener("click", startNewChallenge);
 elements.wrongModeBtn.addEventListener("click", jumpToWrongReview);
