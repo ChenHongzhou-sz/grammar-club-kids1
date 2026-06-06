@@ -30,6 +30,8 @@
 
 仓库已包含 `.github/workflows/deploy-pages.yml`。
 
+最近一次 Pages 触发修复提交日期：2026-06-06。
+
 首次发布后，如果页面没有自动上线，请在仓库 `Settings -> Pages` 中确认发布方式为 `GitHub Actions`。
 
 预期地址：
