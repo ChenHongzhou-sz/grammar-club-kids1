@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grammar Club Kids</title>
+    <meta
+      name="description"
+      content="给七年级孩子的英语基础语法 Web App，用短规则、好例句和小练习建立语法底座。"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-glow glow-left" aria-hidden="true"></div>
+    <div class="page-glow glow-right" aria-hidden="true"></div>
+
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Grammar Club Kids</p>
+        <h1>给七年级孩子的英语语法小课堂</h1>
+        <p class="hero-text">
+          先理解，再练习，再开口用。每一课都很短，但都能马上帮你看懂句子、写对句子。
+        </p>
+        <div class="hero-actions">
+          <button id="startLearningBtn" class="primary-btn">从推荐课程开始</button>
+          <button id="reviewBtn" class="ghost-btn">抽一张复习卡</button>
+        </div>
+      </div>
+
+      <section class="hero-panel" aria-label="学习概览">
+        <div class="mini-chip">10 节微课</div>
+        <div class="panel-row">
+          <strong id="heroCompleted">0</strong>
+          <span>已完成课程</span>
+        </div>
+        <div class="panel-row">
+          <strong id="heroAccuracy">0%</strong>
+          <span>练习正确率</span>
+        </div>
+        <div class="panel-note">
+          设计原则：
+          <span>一句规则讲清楚</span>
+          <span>例句贴近日常</span>
+          <span>练完马上会用</span>
+        </div>
+      </section>
+    </header>
+
+    <main class="app-layout">
+      <aside class="sidebar">
+        <section class="progress-card">
+          <div class="card-topline">
+            <span>学习进度</span>
+            <span id="progressText">0 / 10</span>
+          </div>
+          <div class="progress-track" aria-hidden="true">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+          <p id="progressMessage" class="progress-message">
+            先从第 1 课开始，把句子的骨架认清楚。
+          </p>
+        </section>
+
+        <section class="menu-card">
+          <div class="card-topline">
+            <span>课程地图</span>
+            <span>点一下就能切换</span>
+          </div>
+          <div id="lessonMenu" class="lesson-menu"></div>
+        </section>
+
+        <section class="credit-card">
+          <h2>内容说明</h2>
+          <p>
+            这个版本面向孩子重新编排与改写，保留“先讲骨架，再讲规则”的思路，不直接照搬原文。
+          </p>
+          <p>
+            参考来源：
+            <a href="https://github.com/hzpt-inet-club/english-note" target="_blank" rel="noreferrer">
+              hzpt-inet-club/english-note
+            </a>
+          </p>
+        </section>
+      </aside>
+
+      <section class="content">
+        <article id="lessonView" class="lesson-card" aria-live="polite"></article>
+
+        <section id="reviewSection" class="review-card">
+          <div class="card-topline">
+            <span>复习卡片</span>
+            <span>翻一翻，记得更牢</span>
+          </div>
+          <div class="flashcard-meta">
+            <p id="flashcardLesson"></p>
+            <button id="flipCardBtn" class="ghost-btn small-btn">翻到背面</button>
+          </div>
+          <button id="flashcard" class="flashcard" aria-live="polite"></button>
+          <div class="flashcard-actions">
+            <button id="prevCardBtn" class="ghost-btn small-btn">上一张</button>
+            <button id="randomCardBtn" class="primary-btn small-btn">随机一张</button>
+            <button id="nextCardBtn" class="ghost-btn small-btn">下一张</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Grammar Club Kids · 为家庭自学设计的第一版基础语法站</p>
+      <p>建议学习顺序：句子骨架 → be 动词 → 一般现在时 → 提问与回答</p>
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
