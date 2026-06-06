@@ -102,6 +102,7 @@ a {
 .credit-card,
 .lesson-card,
 .challenge-session-card,
+.wrongbook-card,
 .review-card {
   background: var(--paper);
   backdrop-filter: blur(14px);
@@ -262,6 +263,7 @@ a {
 .credit-card,
 .lesson-card,
 .challenge-session-card,
+.wrongbook-card,
 .review-card {
   padding: 1.25rem;
   border-radius: var(--radius-lg);
@@ -360,25 +362,29 @@ a {
   gap: 1.25rem;
 }
 
-.challenge-session-card {
+.challenge-session-card,
+.wrongbook-card {
   display: grid;
   gap: 1rem;
 }
 
-.challenge-summary {
+.challenge-summary,
+.wrongbook-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.9rem;
 }
 
-.challenge-stat {
+.challenge-stat,
+.wrongbook-stat {
   padding: 1rem;
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid var(--line);
 }
 
-.challenge-stat strong {
+.challenge-stat strong,
+.wrongbook-stat strong {
   display: block;
   margin-top: 0.35rem;
   font-size: 1.4rem;
@@ -390,12 +396,19 @@ a {
   font-size: 1.2rem;
 }
 
+.wrongbook-note {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .challenge-toolbar {
   display: flex;
   justify-content: flex-end;
 }
 
-.challenge-board {
+.challenge-board,
+.wrongbook-board {
   display: grid;
   gap: 1rem;
 }
@@ -572,6 +585,24 @@ a {
   gap: 1rem;
 }
 
+.wrongbook-empty {
+  padding: 1.15rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(121, 211, 195, 0.12), rgba(255, 255, 255, 0.95));
+  border: 1px dashed rgba(32, 48, 80, 0.18);
+}
+
+.wrongbook-empty h3 {
+  margin: 0 0 0.65rem;
+  font-size: 1rem;
+}
+
+.wrongbook-empty p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
 .flashcard-meta {
   display: flex;
   justify-content: space-between;
@@ -650,6 +681,7 @@ a {
 
 .lesson-card,
 .challenge-session-card,
+.wrongbook-card,
 .review-card,
 .hero-copy,
 .hero-panel {
@@ -674,6 +706,7 @@ a {
   .credit-card,
   .lesson-card,
   .challenge-session-card,
+  .wrongbook-card,
   .review-card {
     padding: 1.1rem;
   }
@@ -713,6 +746,10 @@ a {
   }
 
   .challenge-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .wrongbook-summary {
     grid-template-columns: 1fr;
   }
 

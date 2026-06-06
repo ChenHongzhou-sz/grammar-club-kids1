@@ -24,6 +24,7 @@
         <div class="hero-actions">
           <button id="startLearningBtn" class="primary-btn">从推荐课程开始</button>
           <button id="challengeModeBtn" class="primary-btn warm-btn">开始 5 题闯关</button>
+          <button id="wrongModeBtn" class="ghost-btn">去刷错题</button>
           <button id="reviewBtn" class="ghost-btn">抽一张复习卡</button>
         </div>
       </div>
@@ -37,6 +38,10 @@
         <div class="panel-row">
           <strong id="heroAccuracy">0%</strong>
           <span>练习正确率</span>
+        </div>
+        <div class="panel-row">
+          <strong id="heroWrongCount">0</strong>
+          <span>待复习错题</span>
         </div>
         <div class="panel-note">
           设计原则：
@@ -99,6 +104,18 @@
           <div id="challengeBoard" class="challenge-board"></div>
         </section>
 
+        <section id="wrongSection" class="wrongbook-card">
+          <div class="card-topline">
+            <span>错题回炉</span>
+            <span>答对后会自动毕业</span>
+          </div>
+          <div id="wrongSummary" class="wrongbook-summary"></div>
+          <div class="challenge-toolbar">
+            <button id="clearWrongBtn" class="ghost-btn small-btn">清空错题本</button>
+          </div>
+          <div id="wrongBoard" class="wrongbook-board"></div>
+        </section>
+
         <section id="reviewSection" class="review-card">
           <div class="card-topline">
             <span>复习卡片</span>
@@ -119,7 +136,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>Grammar Club Kids · 为家庭自学设计的第二版基础语法站</p>
+      <p>Grammar Club Kids · 为家庭自学设计的第三版基础语法站</p>
       <p>建议学习顺序：句子骨架 → be 动词 → there be → 一般现在时 → 提问与回答 → 一般过去时</p>
     </footer>
 

@@ -799,6 +799,18 @@ const lessons = [
 const storageKey = "grammarClubKidsState_v1";
 const totalLessons = lessons.length;
 const challengeSize = 5;
+const questionBank = lessons.flatMap((lesson) =>
+  lesson.quiz.map((item, questionIndex) => ({
+    id: `${lesson.id}-${questionIndex}`,
+    lessonId: lesson.id,
+    lessonTitle: `${lesson.unit} · ${lesson.title}`,
+    question: item.question,
+    options: item.options,
+    answer: item.answer,
+    explain: item.explain
+  }))
+);
+const questionLookup = new Map(questionBank.map((question) => [question.id, question]));
 const flashcards = lessons.flatMap((lesson) =>
   lesson.cards.map((card) => ({
     ...card,
@@ -816,11 +828,17 @@ const elements = {
   heroLessonCount: document.getElementById("heroLessonCount"),
   heroCompleted: document.getElementById("heroCompleted"),
   heroAccuracy: document.getElementById("heroAccuracy"),
+  heroWrongCount: document.getElementById("heroWrongCount"),
   challengeSummary: document.getElementById("challengeSummary"),
   challengeBoard: document.getElementById("challengeBoard"),
   challengeSection: document.getElementById("challengeSection"),
   challengeModeBtn: document.getElementById("challengeModeBtn"),
   newChallengeBtn: document.getElementById("newChallengeBtn"),
+  wrongSummary: document.getElementById("wrongSummary"),
+  wrongBoard: document.getElementById("wrongBoard"),
+  wrongSection: document.getElementById("wrongSection"),
+  wrongModeBtn: document.getElementById("wrongModeBtn"),
+  clearWrongBtn: document.getElementById("clearWrongBtn"),
   flashcard: document.getElementById("flashcard"),
   flashcardLesson: document.getElementById("flashcardLesson"),
   flipCardBtn: document.getElementById("flipCardBtn"),
@@ -843,23 +861,8 @@ function shuffleArray(items) {
   return next;
 }
 
-function getQuestionBank() {
-  return lessons.flatMap((lesson) =>
-    lesson.quiz.map((item, questionIndex) => ({
-      id: `${lesson.id}-${questionIndex}`,
-      lessonId: lesson.id,
-      lessonTitle: `${lesson.unit} · ${lesson.title}`,
-      question: item.question,
-      options: item.options,
-      answer: item.answer,
-      explain: item.explain
-    }))
-  );
-}
-
 function createChallengeQuestions() {
-  const bank = getQuestionBank();
-  return shuffleArray(bank).slice(0, Math.min(challengeSize, bank.length));
+  return shuffleArray(questionBank).slice(0, Math.min(challengeSize, questionBank.length));
 }
 
 function createEmptyChallenge() {
@@ -877,6 +880,8 @@ function getDefaultState() {
     selectedLessonId: lessons[0].id,
     completedIds: [],
     answers: {},
+    wrongIds: [],
+    wrongReview: {},
     cardIndex: 0,
     cardSide: "front",
     challenge: createEmptyChallenge()
@@ -891,6 +896,23 @@ function loadState() {
     }
 
     const parsed = JSON.parse(raw);
+    const normalizedWrongIds = Array.isArray(parsed.wrongIds)
+      ? [...new Set(parsed.wrongIds.filter((questionId) => questionLookup.has(questionId)))]
+      : [];
+    const normalizedWrongReview =
+      parsed.wrongReview && typeof parsed.wrongReview === "object"
+        ? Object.fromEntries(
+            Object.entries(parsed.wrongReview)
+              .filter(([questionId]) => questionLookup.has(questionId))
+              .map(([questionId, value]) => [
+                questionId,
+                {
+                  selectedIndex: typeof value?.selectedIndex === "number" ? value.selectedIndex : null,
+                  correct: Boolean(value?.correct)
+                }
+              ])
+          )
+        : {};
 
     const normalizedChallenge = {
       ...createEmptyChallenge(),
@@ -913,6 +935,8 @@ function loadState() {
         : lessons[0].id,
       completedIds: Array.isArray(parsed.completedIds) ? parsed.completedIds : [],
       answers: parsed.answers && typeof parsed.answers === "object" ? parsed.answers : {},
+      wrongIds: normalizedWrongIds,
+      wrongReview: normalizedWrongReview,
       challenge: normalizedChallenge
     };
   } catch (error) {
@@ -1008,6 +1032,35 @@ function getChallengeScore() {
   };
 }
 
+function getWrongQuestions() {
+  return state.wrongIds.map((questionId) => questionLookup.get(questionId)).filter(Boolean);
+}
+
+function syncWrongQuestion(questionId, isCorrect) {
+  if (!questionLookup.has(questionId)) {
+    return;
+  }
+
+  if (isCorrect) {
+    state.wrongIds = state.wrongIds.filter((id) => id !== questionId);
+    if (state.wrongReview[questionId]) {
+      delete state.wrongReview[questionId];
+    }
+    return;
+  }
+
+  if (!state.wrongIds.includes(questionId)) {
+    state.wrongIds = [questionId, ...state.wrongIds];
+  }
+}
+
+function clearWrongQuestions() {
+  state.wrongIds = [];
+  state.wrongReview = {};
+  saveState();
+  renderAll();
+}
+
 function getStarString(score) {
   const full = "★".repeat(score);
   const empty = "☆".repeat(Math.max(0, challengeSize - score));
@@ -1034,6 +1087,10 @@ function handleChallengeAnswer(questionId, optionIndex) {
   }
 
   challenge.answers[questionId] = optionIndex;
+  const question = questionLookup.get(questionId);
+  if (question) {
+    syncWrongQuestion(questionId, optionIndex === question.answer);
+  }
 
   const score = getChallengeScore();
   if (score.finished && challenge.lastScore === null) {
@@ -1069,6 +1126,10 @@ function handleAnswer(lessonId, questionIndex, optionIndex) {
   }
 
   state.answers[lessonId][questionIndex] = optionIndex;
+  const question = questionLookup.get(`${lessonId}-${questionIndex}`);
+  if (question) {
+    syncWrongQuestion(question.id, optionIndex === question.answer);
+  }
   saveState();
   renderAll();
 }
@@ -1101,6 +1162,30 @@ function jumpToChallengeMode() {
   }
 
   elements.challengeSection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function jumpToWrongReview() {
+  elements.wrongSection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function handleWrongReviewAnswer(questionId, optionIndex) {
+  const question = questionLookup.get(questionId);
+  if (!question) {
+    return;
+  }
+
+  const isCorrect = optionIndex === question.answer;
+  state.wrongReview[questionId] = {
+    selectedIndex: optionIndex,
+    correct: isCorrect
+  };
+
+  if (isCorrect) {
+    syncWrongQuestion(questionId, true);
+  }
+
+  saveState();
+  renderAll();
 }
 
 function setFlashcard(index) {
@@ -1175,6 +1260,7 @@ function renderProgress() {
   const stats = getStats();
   const progressPercent = Math.round((stats.completedCount / totalLessons) * 100);
   const recommended = getRecommendedLesson();
+  const wrongCount = state.wrongIds.length;
 
   elements.heroLessonCount.textContent = `${totalLessons} 节微课`;
   elements.progressBar.style.width = `${progressPercent}%`;
@@ -1185,6 +1271,7 @@ function renderProgress() {
       : `推荐下一节：${recommended.unit}《${recommended.title}》`;
   elements.heroCompleted.textContent = String(stats.completedCount);
   elements.heroAccuracy.textContent = `${stats.accuracy}%`;
+  elements.heroWrongCount.textContent = String(wrongCount);
 }
 
 function renderLessonView() {
@@ -1392,6 +1479,82 @@ function renderChallenge() {
   });
 }
 
+function renderWrongBook() {
+  const wrongQuestions = getWrongQuestions();
+  const totalQuestionCount = questionBank.length;
+
+  elements.wrongSummary.innerHTML = `
+    <article class="wrongbook-stat">
+      <span>当前错题</span>
+      <strong>${wrongQuestions.length}</strong>
+    </article>
+    <article class="wrongbook-stat">
+      <span>题库总数</span>
+      <strong>${totalQuestionCount}</strong>
+    </article>
+    <article class="wrongbook-stat">
+      <span>清理方式</span>
+      <strong>${wrongQuestions.length === 0 ? "已清空" : "答对毕业"}</strong>
+      <p class="wrongbook-note">${wrongQuestions.length === 0 ? "继续保持，做题也别着急。" : "先把错题做对，再去刷新题。"}</p>
+    </article>
+  `;
+
+  if (wrongQuestions.length === 0) {
+    elements.wrongBoard.innerHTML = `
+      <article class="wrongbook-empty">
+        <h3>现在没有待回炉的错题</h3>
+        <p>继续学新课，或者先去做一轮 5 题闯关。答错的题会自动来到这里。</p>
+      </article>
+    `;
+    return;
+  }
+
+  elements.wrongBoard.innerHTML = wrongQuestions
+    .map((question, index) => {
+      const reviewState = state.wrongReview[question.id];
+      const chosenIndex = reviewState?.selectedIndex;
+      const hasAnswered = typeof chosenIndex === "number";
+      const isCorrect = reviewState?.correct === true;
+      const cardClass = !hasAnswered ? "quiz-card" : isCorrect ? "quiz-card correct" : "quiz-card wrong";
+
+      const optionsHtml = question.options
+        .map((option, optionIndex) => `
+          <button
+            class="${buildQuizOptionClass(chosenIndex === optionIndex, optionIndex === question.answer, hasAnswered, optionIndex, question.answer)}"
+            data-wrong-question="${question.id}"
+            data-wrong-option="${optionIndex}"
+          >
+            ${String.fromCharCode(65 + optionIndex)}. ${option}
+          </button>
+        `)
+        .join("");
+
+      return `
+        <article class="${cardClass}">
+          <h3>回炉题 ${index + 1}</h3>
+          <p class="challenge-question-meta">${question.lessonTitle}</p>
+          <p class="quiz-question">${question.question}</p>
+          <div class="quiz-options">${optionsHtml}</div>
+          ${
+            hasAnswered
+              ? `<p class="quiz-explain"><strong>${isCorrect ? "这题毕业了。 " : "还差一点。 "}</strong>${question.explain}</p>`
+              : `<p class="quiz-explain">先自己想，再点一个答案。答对后这题会自动从错题本移出。</p>`
+          }
+        </article>
+      `;
+    })
+    .join("");
+
+  document.querySelectorAll("[data-wrong-question]").forEach((button) => {
+    button.addEventListener("click", () => {
+      handleWrongReviewAnswer(
+        button.getAttribute("data-wrong-question"),
+        Number(button.getAttribute("data-wrong-option"))
+      );
+    });
+  });
+}
+
 function renderFlashcard() {
   const card = flashcards[state.cardIndex] || flashcards[0];
   const showFront = state.cardSide === "front";
@@ -1411,12 +1574,15 @@ function renderAll() {
   renderProgress();
   renderLessonView();
   renderChallenge();
+  renderWrongBook();
   renderFlashcard();
 }
 
 elements.startLearningBtn.addEventListener("click", jumpToRecommendedLesson);
 elements.challengeModeBtn.addEventListener("click", jumpToChallengeMode);
 elements.newChallengeBtn.addEventListener("click", startNewChallenge);
+elements.wrongModeBtn.addEventListener("click", jumpToWrongReview);
+elements.clearWrongBtn.addEventListener("click", clearWrongQuestions);
 elements.reviewBtn.addEventListener("click", () => {
   randomFlashcard();
   elements.reviewSection.scrollIntoView({ behavior: "smooth", block: "start" });
